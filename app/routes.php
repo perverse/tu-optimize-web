@@ -13,4 +13,8 @@
 
 Route::get('/', array('uses' => 'HomeController@showWelcome', 'as' => 'home'));
 
-Route::get('deck/builder', array('uses' => 'DeckController@showBuilder', 'as' => 'deck_builder'));
+Route::get('deck/builder', array('uses' => 'DeckController@showBuilder', 'as' => 'deck.builder'));
+
+// API Routes
+
+require app_path() . '/apiv1routes.php';

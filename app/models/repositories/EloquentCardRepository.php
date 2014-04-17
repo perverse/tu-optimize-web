@@ -20,9 +20,19 @@ class EloquentCardRepository implements CardRepositoryInterface {
         return Card::where('name', '=', $name)->first()->toArray();
     }
     
+    public function allByType($type)
+    {
+        return Card::where('type', '=', $type)->get()->toArray();
+    }
+    
     public function store($data)
     {
         return Card::create($data)->toArray();
+    }
+    
+    public function truncate()
+    {
+        return Card::truncate();
     }
     
 }

@@ -56,7 +56,7 @@
 					<li {{ (Request::is('users*') ? 'class="active"' : '') }}><a href="{{ URL::action('Sentinel\UserController@index') }}">Users</a></li>
 					<li {{ (Request::is('groups*') ? 'class="active"' : '') }}><a href="{{ URL::action('Sentinel\GroupController@index') }}">Groups</a></li>
 				@endif
-                <li><a href="{{ URL::route('deck_builder') }}">Builder</a></li>
+                <li><a href="{{ URL::route('deck.builder') }}">Builder</a></li>
 	          </ul>
 	          <ul class="nav navbar-nav navbar-right">
 	            @if (Sentry::check())

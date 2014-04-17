@@ -3,7 +3,9 @@
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
-Use Config;
+use App\Models\Interfaces\CardRepositoryInterface;
+use App\Services\Interfaces\CardFeedParserInterface;
+Use Config, App;
 
 class PopulateCardDatabase extends Command {
 
@@ -26,8 +28,10 @@ class PopulateCardDatabase extends Command {
 	 *
 	 * @return void
 	 */
-	public function __construct()
+	public function __construct(CardRepositoryInterface $cards, CardFeedParserInterface $parser)
 	{
+        $this->cards = $cards;
+        $this->parser = $parser;
 		parent::__construct();
 	}
 
@@ -38,12 +42,23 @@ class PopulateCardDatabase extends Command {
 	 */
 	public function fire()
 	{
-		$cardsxml = file_get_contents(Config::get('cardsync.sync_url'));
-        $cards = new \SimpleXMLElement($cardsxml);
+        $cards = $this->parser->parse()->getCards();
         
-        foreach ($cards as $card) {
-            
+        if ($this->argument('truncate')) {
+            $this->cards->truncate();
+            foreach ($cards as $card) {
+                $this->cards->store($card);
+            }
+        } else {
+            foreach ($cards as $card) {
+                $dbCard = $this->cards->findByName($card['name']);
+                if (empty($dbCard)) { 
+                    $this->cards->store($card);
+                }
+            }
         }
+		
+        
 	}
 
 	/**
@@ -54,6 +69,7 @@ class PopulateCardDatabase extends Command {
 	protected function getArguments()
 	{
 		return array(
+            array('truncate', null, InputArgument::OPTIONAL, 'Truncate the database before import')
 		);
 	}
 

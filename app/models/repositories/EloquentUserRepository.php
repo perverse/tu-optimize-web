@@ -20,9 +20,4 @@ class EloquentUserRepository implements UserRepositoryInterface {
         return User::where('username', '=', $username)->first()->toArray();
     }
     
-    public function store($data)
-    {
-        return User::create($data)->toArray();
-    }
-    
 }

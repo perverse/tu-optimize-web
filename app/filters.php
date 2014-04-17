@@ -78,3 +78,56 @@ Route::filter('csrf', function()
 		throw new Illuminate\Session\TokenMismatchException;
 	}
 });
+
+Route::filter('hasDeckAccess', function($route, $request, $value)
+{
+	if (!Sentry::check()) return Redirect::guest(Config::get('Sentinel::config.routes.login'));
+
+	$deckId = Route::input('deckid');
+    
+    $repo = App::make('App\Models\Interfaces\DeckRepositoryInterface');
+    $userId = $repo->deckUserId($deckId);
+
+    if ($userId !== NULL) {
+    
+        try
+        {
+            $user = Sentry::getUser();
+
+            if ( $userId != Session::get('userId') && (! $user->hasAccess($value)) )
+            {
+                Session::flash('error', trans('Sentinel::users.noaccess'));
+                return Redirect::route('home');
+            }
+        }
+        catch (Cartalyst\Sentry\Users\UserNotFoundException $e)
+        {
+            Session::flash('error', trans('Sentinel::users.notfound'));
+            return Redirect::guest(Config::get('Sentinel::config.routes.login'));
+        }
+    
+    }
+});
+
+Route::filter('hasUserAccess', function($route, $request, $value)
+{
+	if (!Sentry::check()) return Redirect::guest(Config::get('Sentinel::config.routes.login'));
+
+	$userId = Route::input('userid');
+
+	try
+	{
+		$user = Sentry::getUser();
+
+		if ( $userId != Session::get('userId') && (! $user->hasAccess($value)) )
+		{
+			Session::flash('error', trans('Sentinel::users.noaccess'));
+			return Redirect::route('home');
+		}
+	}
+	catch (Cartalyst\Sentry\Users\UserNotFoundException $e)
+	{
+		Session::flash('error', trans('Sentinel::users.notfound'));
+		return Redirect::guest(Config::get('Sentinel::config.routes.login'));
+	}
+});

@@ -6,5 +6,6 @@ interface CardRepositoryInterface {
     public function find($id);
     public function findByName($name);
     public function store($data);
+    public function allByType($type);
     
 }

@@ -108,7 +108,8 @@ return array(
 		'Illuminate\Workbench\WorkbenchServiceProvider',
         
         'App\Providers\CommandProvider',
-        'App\Providers\RepositoryProvider',
+        'App\Providers\EloquentRepositoryProvider',
+        'App\Providers\ServicesProvider',
         
         'Sentinel\SentinelServiceProvider',
 

@@ -2,6 +2,7 @@
 
 use App\Models\Interfaces\DeckRepositoryInterface;
 use App\Models\Eloquent\Deck;
+use App\Models\Eloquent\User;
 use Str, Validator;
 
 class EloquentDeckRepository implements DeckRepositoryInterface {
@@ -66,9 +67,25 @@ class EloquentDeckRepository implements DeckRepositoryInterface {
         return true;
     }
     
+    public function deckUserId($deckId)
+    {
+        $deck = Deck::find($deckId);
+        
+        if ($deck) {
+            return $deck->user_id;
+        } else {
+            return NULL;
+        }
+    }
+    
     public function validate($data)
     {
         return Validator::make($data, $rules);
+    }
+    
+    public function decksByUsername($username)
+    {
+        return User::where('username', '=', $username)->first()->decks()->get()->toArray();
     }
     
 }

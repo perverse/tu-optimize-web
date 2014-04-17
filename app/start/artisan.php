@@ -12,3 +12,4 @@
 */
 
 Artisan::resolve('cards.populate');
+Artisan::resolve('cards.download');

@@ -4,6 +4,7 @@ class DeckController extends BaseController {
     
     public function __construct()
     {
+        
     }
     
     public function showBuilder()

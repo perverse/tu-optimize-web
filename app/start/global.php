@@ -79,3 +79,7 @@ App::down(function()
 */
 
 require app_path().'/filters.php';
+
+/* Validators */
+
+require app_path().'/validators.php';

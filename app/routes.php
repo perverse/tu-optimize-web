@@ -11,7 +11,6 @@
 |
 */
 
-Route::get('/', function()
-{
-	return View::make('hello');
-});
+Route::get('/', array('uses' => 'HomeController@showWelcome', 'as' => 'home'));
+
+Route::get('deck/builder', array('uses' => 'DeckController@showBuilder', 'as' => 'deck_builder'));
